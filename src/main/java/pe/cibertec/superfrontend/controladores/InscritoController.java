@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,9 +15,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import pe.cibertec.superfrontend.controladores.interfaz.IDatoController;
 import pe.cibertec.superfrontend.modelos.Inscrito;
+import pe.cibertec.superfrontend.modelos.Modalidad;
 import pe.cibertec.superfrontend.servicios.ContactoService;
 import pe.cibertec.superfrontend.servicios.EspecialistaService;
 import pe.cibertec.superfrontend.servicios.InscritoService;
+import pe.cibertec.superfrontend.xtra.Mensaje;
 
 @Controller
 @RequestMapping("/inscripciones")
@@ -51,40 +54,69 @@ public class InscritoController implements IDatoController<Inscrito> {
 			return new ModelAndView("redirect:/inscripciones");
 		}
 	}
+	
 
-	@Override
+	@GetMapping("/crear")
 	public ModelAndView formularioCrear(ModelMap m) {
-		// TODO Auto-generated method stub
-		return null;
+		Inscrito nuevo = new Inscrito();
+		m.addAttribute("inscrito", nuevo);
+		m.addAttribute("contactos", srvc_contactos.listarTodo()); //Estos son para el formulario
+		m.addAttribute("especialistas", srvc_especialistas.listarTodo()); //Recuerda sus nombres
+		return new ModelAndView("crud/crear/Inscrito", m);
 	}
 
-	@Override
-	public ModelAndView formularioModificar(int id, ModelMap m) {
-		// TODO Auto-generated method stub
-		return null;
+	@GetMapping("/modificar/{id}")
+	public ModelAndView formularioModificar(@PathVariable("id") int id, ModelMap m) {
+		Inscrito empty = new Inscrito();
+		Inscrito cambiar = srvc_inscritos.obtener(id);
+		if (!cambiar.equals(empty)) {
+			m.addAttribute("inscrito", cambiar);
+			m.addAttribute("contactos", srvc_contactos.listarTodo()); //Estos son para el formulario
+			m.addAttribute("especialistas", srvc_especialistas.listarTodo()); //Recuerda sus nombres
+			return new ModelAndView("crud/crear/Inscrito", m);
+		} else {
+			return new ModelAndView("redirect:/inscripciones");
+		}
 	}
 
-	@Override
-	public RedirectView crear(Inscrito nuevo, RedirectAttributes a) {
-		// TODO Auto-generated method stub
-		return null;
+	@PostMapping("/crear")
+	public RedirectView crear(Inscrito nuevo, RedirectAttributes atributos) {
+		Mensaje.consola(nuevo.toString());
+		/*String resultado = srvc_inscritos.agregar(nuevo);
+		if (resultado.equals("200 OK")) {
+			atributos.addFlashAttribute("texto", "¡Se agregó con éxito!");
+		} else {
+			atributos.addFlashAttribute("texto", "No se pudo crear; intenta de nuevo");
+		}*/
+		return new RedirectView("/inscripciones");
 	}
 
-	@Override
-	public RedirectView modificar(Inscrito cambiar, RedirectAttributes a) {
-		// TODO Auto-generated method stub
-		return null;
+	@PostMapping("/modificar")
+	public RedirectView modificar(Inscrito cambiar, RedirectAttributes atributos) {
+		Mensaje.consola(cambiar.toString());
+		/*String resultado = srvc_inscritos.agregar(cambiar);
+		if (resultado.equals("200 OK")) {
+			atributos.addFlashAttribute("texto", "¡Se modificó con éxito!");
+		} else {
+			atributos.addFlashAttribute("texto", "No se pudo modificar; intenta de nuevo");
+		}*/
+		return new RedirectView("/inscripciones");
 	}
 
-	@Override
-	public RedirectView eliminar(int id, RedirectAttributes a) {
-		// TODO Auto-generated method stub
-		return null;
+	@PostMapping("/eliminar")
+	public RedirectView eliminar(int id, RedirectAttributes atributos) {
+		String resultado = srvc_inscritos.eliminar(id);
+		if (resultado.equals("200 OK")) {
+			atributos.addFlashAttribute("texto", "Eliminación exitosa");
+		} else {
+			atributos.addFlashAttribute("texto",
+					"Imposible eliminar; es probable que haya datos que dependen de esta, por lo que deberás cambiarlos");
+		}
+		return new RedirectView("/inscripciones");
 	}
-
-	@Override
+	
+	@PostMapping("/volver")
 	public ModelAndView volver() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ModelAndView("redirect:/inscripciones");
 	}
 }

@@ -20,7 +20,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarCollapse">
 				<div class="navbar-nav">
-					<a th:href="@{/especialistas}" class="nav-item nav-link">Volver</a>
+					<a th:href="@{/inscripciones}" class="nav-item nav-link">Volver</a>
 				</div>
 			</div>
 		</div>
@@ -30,12 +30,12 @@
 		<div class="row">
 			<div class="col"></div>
 			<div class="col">
-				<h4 th:if="${especialista.id == 0}">Agregar especialista</h4>
-				<h4 th:if="${especialista.id > 0}">Modificar especialista</h4>
+				<h4 th:if="${inscrito.id == 0}">Ingresar participante</h4>
+				<h4 th:if="${inscrito.id > 0}">Modificar participante</h4>
 				<br>
 				<form action="#"
-					th:action="${especialista.id != 0 ? '/especialistas/modificar' : '/especialistas/crear'}"
-					th:object="${especialista}" th:method="post">
+					th:action="${inscrito.id != 0 ? '/inscripciones/modificar' : '/inscripciones/crear'}"
+					th:object="${inscrito}" th:method="post">
 					<input type="hidden" th:field="*{id}" name="id" id="id">
 					<div class="form-group">
 						<label for="nmbrs">Nombres</label> <input type="text"
@@ -51,11 +51,6 @@
 					<div class="form-group">
 						<label for="dni">DNI</label> <input type="text"
 							class="form-control" id="dni" th:field="*{dni}" name="dni">
-					</div>
-					<br>
-					<div class="form-group">
-						<label for="ruc">RUC</label> <input type="text"
-							class="form-control" id="ruc" th:field="*{ruc}" name="ruc">
 					</div>
 					<br>
 					<div class="form-group">
@@ -80,9 +75,26 @@
 							class="form-control" id="telf" th:field="*{telf}" name="telf">
 					</div>
 					<br>
+					<div class="form-group blu-margin">
+						<label for="contacto_id">Elegir contacto</label><select
+							class="form-control" th:field="*{contacto_id}" id="contacto_id">
+							<option th:each="ec : ${contactos}" th:value="${ec.id}"
+								th:text="'Contacto: ' + ${ec.id} + '. ' +${ec.nmbrs} + ' ' + ${ec.apllds}"></option>
+						</select>
+					</div>
+					<br>
+					<div class="form-group blu-margin">
+						<label for="especialista_id">Elegir especialista preferido</label><select
+							class="form-control" th:field="*{especialista_id}"
+							id="especialista_id">
+							<option th:each="ep : ${especialistas}" th:value="${ep.id}"
+								th:text="'Especialista: ' + ${ep.id} + '. ' +${ep.nmbrs} + ' ' + ${ep.apllds}"></option>
+						</select>
+					</div>
+					<br>
 					<button type="submit" class="btn btn-success">Guardar</button>
 					<button type="submit" class="btn btn-warning"
-						th:formaction="@{/especialistas/volver}" th:method="post">Cancelar</button>
+						th:formaction="@{/inscripciones/volver}" th:method="post">Cancelar</button>
 				</form>
 			</div>
 			<div class="col"></div>

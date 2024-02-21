@@ -41,7 +41,6 @@ public class ContactoService implements IDatoService<Contacto> {
 		try {
 			ResponseEntity<Contacto> obtener = plantillaRest.getForEntity(baseUri + "contactos/"+id,
 					Contacto.class);
-			Mensaje.consola("Mira: " +obtener.getBody().toString());
 			return obtener.getBody();
 		} catch (Exception e) {
 			return new Contacto();
@@ -51,7 +50,7 @@ public class ContactoService implements IDatoService<Contacto> {
 	@Override
 	public String agregar(Contacto nuevo) {
 		ResponseEntity<String> agregar = plantillaRest.postForEntity(baseUri + "contactos", nuevo, String.class);
-		return agregar.getBody();
+		return agregar.getStatusCode().toString();
 	}
 
 	@Override

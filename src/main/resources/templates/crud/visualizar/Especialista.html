@@ -74,8 +74,6 @@
 						<p>Todavía no hay participantes que lleven sesiones con este especialista.</p>
 					</dd>
 					<dd class="col-sm-9" th:if="${!especialista.inscritos.isEmpty()}">
-					<dd class="col-sm-9">
-						<!-- p th:text="${#lists.isEmpty(contacto.inscritos)}"></p-->
 						<div th:each="inscrito : ${especialista.inscritos}">
 							<p
 								th:text="${inscrito.nmbrs}
