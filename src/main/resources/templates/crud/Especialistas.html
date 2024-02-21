@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>EITA :: Gestión de especialistas</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light"
+		style="background-color: #e3f2fd;">
+		<div class="container-fluid">
+			<a th:href="@{/}" class="navbar-brand"> <img
+				th:src="@{images/Tango_icon_nature.svg}" height="28"
+				alt="NeuroDispuesta">
+			</a>
+			<button type="button" class="navbar-toggler"
+				data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<div class="navbar-nav">
+					<a th:href="@{/especialistas}" class="nav-item nav-link active">Especialistas</a>
+					<a th:href="@{/inscripciones}" class="nav-item nav-link">Inscripciones</a>
+					<a th:href="@{/contactos}" class="nav-item nav-link">Contactos</a>
+					<a th:href="@{/buscar}" class="nav-item nav-link">Buscar</a>
+				</div>
+				<div class="navbar-nav ms-auto">
+					<a th:href="@{/perfil}" class="nav-item nav-link">Mi perfil</a> <a
+						th:href="@{/salir}" class="nav-item nav-link text-danger">Salir</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container-xxl">
+		<div class="row" style="min-height: 120px;"></div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col" style="min-width: 60%;">
+				<div th:if="${list.isEmpty()}">
+					<h4>Se necesita registrar especialistas</h4>
+					<br>
+					<p>Puedes registrar cualquier especialista utilizando los
+						botones en la parte posterior.</p>
+					<br>
+				</div>
+				<div th:if="${!list.isEmpty()}">
+					<h4>Registro de especialistas</h4>
+					<br>
+					<table class="table table-sm">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Apellido</th>
+								<th>Edad</th>
+								<th>DNI</th>
+								<th>RUC</th>
+								<th>E-mail</th>
+								<th>Teléfono</th>
+								<th>Partc.</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="especialista : ${list}">
+								<td th:text="${especialista.nmbrs}"></td>
+								<td th:text="${especialista.apllds}"></td>
+								<td th:text="${especialista.edad}"></td>
+								<td th:text="${especialista.dni}"></td>
+								<td th:text="${especialista.ruc}"></td>
+								<td th:text="${especialista.email}"></td>
+								<td th:text="${especialista.telf}"></td>
+								<td th:text="${#lists.size(especialista.inscritos)}"></td>
+								<td><a class="btn btn-info btn-sm"
+									th:href="@{/especialistas/{id}(id=${especialista.id})}">Ver</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="d-flex">
+					<a th:href="@{/especialistas/0}" class="btn btn-primary">Agregar</a>
+				</div>
+			</div>
+			<div class="col"></div>
+		</div>
+		<div class="row" style="min-height: 120px;"></div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

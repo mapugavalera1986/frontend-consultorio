@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>NeuroDispuesta ::Eliminar participante inscrito</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<div class="navbar-nav">
+					<a th:href="@{/especialistas}" class="nav-item nav-link">Volver</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="container">
+			<div class="row" style="min-height: 120px;"></div>
+			<div class="row">
+				<div class="col">
+				</div>
+				<div class="col">
+					<h4>¡Eliminación de terapeuta!</h4>
+					<br>
+					<form action="#" th:action="@{/especialistas/eliminar}" th:object="${especialista}" method="post">
+						<input type="hidden" th:field="*{especialistaId}" name="especialistaId" id="especialistaId">
+						<p>Cuidado con eliminar al presente especialista. No podrás revertir esta eliminación.</p>
+						<p>Recomendamos que, de ser posible, modifiques el particpante existente para evitar realizar
+							más trabajo del
+							necesario. También puedes optar por crear un nuevo especialista y asignarlo antes de
+							eliminar el
+							presente.</p>
+						<p>¿Deseas procede con la eliminación?</p>
+						<br>
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+						<button type="submit" class="btn btn-warning"
+							th:formaction="@{/especialistas/volver}">Cancelar</button>
+					</form>
+				</div>
+				<div class="col">
+				</div>
+			</div>
+		</div>
+		<div class="row" style="min-height: 120px;"></div>
+	</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>
