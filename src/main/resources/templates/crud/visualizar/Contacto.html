@@ -54,8 +54,10 @@
 						<p th:text="${contacto.telf}"></p>
 					</dd>
 					<dt class="col-sm-3">Particip.</dt>
-					<dd class="col-sm-9">
-						<!-- p th:text="${#lists.isEmpty(contacto.inscritos)}"></p-->
+					<dd class="col-sm-9" th:if="${contacto.inscritos.isEmpty()}">
+						<p>Todavía no hay participantes registrados con este contacto.</p>
+					</dd>
+					<dd class="col-sm-9" th:if="${!contacto.inscritos.isEmpty()}">
 						<div th:each="inscrito : ${contacto.inscritos}">
 							<p
 								th:text="${inscrito.nmbrs}
@@ -72,7 +74,7 @@
 			<div class="col"></div>
 			<div class="col">
 				<a class="btn btn-info btn-sm"
-					th:href="@{/contactos/{id}(id=${contacto.id})}">Ver</a>
+					th:href="@{/especialistas}">Regresar</a>
 			</div>
 			<div class="col"></div>
 		</div>

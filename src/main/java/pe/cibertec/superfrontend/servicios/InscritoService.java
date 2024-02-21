@@ -53,13 +53,6 @@ public class InscritoService implements IDatoService<Inscrito> {
 	}
 
 	@Override
-	public String modificar(int id, Inscrito cambiar) {
-		ResponseEntity<String> modificar = plantillaRest.postForEntity(baseUri + "inscripciones" + cambiar.getId(),
-				cambiar, String.class);
-		return modificar.getBody();
-	}
-
-	@Override
 	public String eliminar(int id) {
 		// TODO Auto-generated method stub
 		return null;

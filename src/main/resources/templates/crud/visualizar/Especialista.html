@@ -70,6 +70,10 @@
 						<p th:text="${especialista.telf}"></p>
 					</dd>
 					<dt class="col-sm-3">Particip.</dt>
+					<dd class="col-sm-9" th:if="${especialista.inscritos.isEmpty()}">
+						<p>Todavía no hay participantes que lleven sesiones con este especialista.</p>
+					</dd>
+					<dd class="col-sm-9" th:if="${!especialista.inscritos.isEmpty()}">
 					<dd class="col-sm-9">
 						<!-- p th:text="${#lists.isEmpty(contacto.inscritos)}"></p-->
 						<div th:each="inscrito : ${especialista.inscritos}">
@@ -88,7 +92,7 @@
 			<div class="col"></div>
 			<div class="col">
 				<a class="btn btn-info btn-sm"
-					th:href="@{/especialistas/{id}(id=${especialista.id})}">Ver</a>
+					th:href="@{/especialistas}">Regresar</a>
 			</div>
 			<div class="col"></div>
 		</div>

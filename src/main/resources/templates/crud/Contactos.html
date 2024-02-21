@@ -37,30 +37,35 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container-md">
+	<div class="container-xxl">
 		<div class="row" style="min-height: 120px;"></div>
 		<div class="row">
 			<div class="col"></div>
-			<div class="col" style="min-width: 50%;">
+			<div class="col" style="min-width: 60%;">
 				<div th:if="${list.isEmpty()}">
-					<h4>No hay contactos registrados</h4>
+					<h4>No se han registrado contactos</h4>
 					<br>
-					<p>Puedes registrar cualquier contacto utilizando los botones
-						en la parte posterior o a la hora de registrar participantes.</p>
+					<p>Puedes registrar cualquier contacto para que se puedan
+						inscribir participantes.</p>
 					<br>
 				</div>
 				<div th:if="${!list.isEmpty()}">
 					<h4>Registro de contactos</h4>
 					<br>
+					<p
+						th:text="${texto} ?:
+						'Puedes ver o editar cualquier contacto de nuestros participantes
+						registrados hasta la fecha'"></p>
 					<table class="table table-sm">
 						<thead>
 							<tr>
 								<th>Nombre</th>
 								<th>Apellido</th>
 								<th>DNI</th>
-								<th>Correo E.</th>
+								<th>E-mail</th>
 								<th>Teléfono</th>
 								<th>Partc.</th>
+								<th></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -74,17 +79,20 @@
 								<td th:text="${#lists.size(contacto.inscritos)}"></td>
 								<td><a class="btn btn-info btn-sm"
 									th:href="@{/contactos/{id}(id=${contacto.id})}">Ver</a></td>
+								<td><a class="btn btn-secondary btn-sm"
+									th:href="@{/contactos/modificar/{id}(id=${contacto.id})}">Editar</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="d-flex">
-					<a th:href="@{/contactos/0}" class="btn btn-primary">Agregar</a>
+					<a th:href="@{/contactos/crear}" class="btn btn-primary btn-sm">Agregar</a>
 				</div>
 			</div>
 			<div class="col"></div>
 		</div>
-		<div class="row" style="min-height: 120px;"></div>
+		<div class="row" style="min-height: 60px;"></div>
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

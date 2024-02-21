@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import pe.cibertec.superfrontend.modelos.Especialista;
 import pe.cibertec.superfrontend.servicios.interfaz.IDatoService;
+import pe.cibertec.superfrontend.xtra.Mensaje;
 
 @Service
 public class EspecialistaService implements IDatoService<Especialista> {
@@ -49,14 +50,7 @@ public class EspecialistaService implements IDatoService<Especialista> {
 	@Override
 	public String agregar(Especialista nuevo) {
 		ResponseEntity<String> agregar = plantillaRest.postForEntity(baseUri + "especialistas", nuevo, String.class);
-		return agregar.getBody();
-	}
-
-	@Override
-	public String modificar(int id, Especialista cambiar) {
-		ResponseEntity<String> modificar = plantillaRest.postForEntity(baseUri + "especialistas" + cambiar.getId(),
-				cambiar, String.class);
-		return modificar.getBody();
+		return agregar.getStatusCode().toString();
 	}
 
 	@Override

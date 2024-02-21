@@ -2,16 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>EITA ::Agregar o modificar especialista</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<meta charset="UTF-8">
+<title>EITA ::Agregar o modificar especialista</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
 </head>
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+			<button type="button" class="navbar-toggler"
+				data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarCollapse">
@@ -22,67 +26,71 @@
 		</div>
 	</nav>
 	<div class="container">
-		<div class="container">
-			<div class="row" style="min-height: 60px;"></div>
-			<div class="row">
-				<div class="col">
-				</div>
-				<div class="col">
-					<h4 th:if="${especialista.id == 0}">Agregar especialista</h4>
-					<h4 th:if="${especialista.id > 0}">Modificar especialista</h4>
+		<div class="row" style="min-height: 60px;"></div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+				<h4 th:if="${especialista.id == 0}">Agregar especialista</h4>
+				<h4 th:if="${especialista.id > 0}">Modificar especialista</h4>
+				<br>
+				<form action="#"
+					th:action="${especialista.id != 0 ? '/especialistas/modificar' : '/especialistas/crear'}"
+					th:object="${especialista}" th:method="post">
+					<input type="hidden" th:field="*{id}" name="id" id="id">
+					<div class="form-group">
+						<label for="nmbrs">Nombres</label> <input type="text"
+							class="form-control" id="nmbrs" th:field="*{nmbrs}" name="nmbrs">
+					</div>
 					<br>
-					<form action="#" th:action="@{/especialistas/guardar}" th:object="${especialista}" method="post">
-						<input type="hidden" th:field="*{id}" name="id" id="id">
-						<div class="form-group">
-							<label for="nmbrs">Nombres</label> <input type="text" class="form-control" id="nmbrs"
-								th:field="*{nmbrs}" name="nmbrs">
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="apllds">Apellidos</label> <input type="text" class="form-control" id="apllds"
-								th:field="*{apllds}" name="apllds">
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="dni">DNI</label> <input type="text" class="form-control" id="dni"
-								th:field="*{dni}" name="dni">
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="ruc">RUC</label> <input type="text" class="form-control" id="ruc"
-								th:field="*{ruc}" name="ruc">
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="nacimiento">Fecha nac.</label> <input type="date" class="form-control" id="nacimiento"
-								th:field="*{nacimiento}" name="nacimiento">
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="email">Correo E.</label> <input type="email" class="form-control" id="email"
-								th:field="*{email}" name="email">
-						</div>
-						<br>
-						<div class="form-group">
-							<label for="telf">Celular</label> <input type="text" class="form-control" id="telf"
-								th:field="*{telf}" name="telf">
-						</div>
-						<br>
-						<p th:text="'Mira: ' + *{telf}"></p>
-						<br>
-						<button type="submit" class="btn btn-success">Guardar</button>
-						<button type="submit" class="btn btn-warning"
-							th:formaction="@{/especialistas/volver}">Cancelar</button>
-					</form>
-				</div>
-				<div class="col">
-				</div>
+					<div class="form-group">
+						<label for="apllds">Apellidos</label> <input type="text"
+							class="form-control" id="apllds" th:field="*{apllds}"
+							name="apllds">
+					</div>
+					<br>
+					<div class="form-group">
+						<label for="dni">DNI</label> <input type="text"
+							class="form-control" id="dni" th:field="*{dni}" name="dni">
+					</div>
+					<br>
+					<div class="form-group">
+						<label for="ruc">RUC</label> <input type="text"
+							class="form-control" id="ruc" th:field="*{ruc}" name="ruc">
+					</div>
+					<br>
+					<div class="form-group">
+						<label for="nacimiento">Fecha nac.</label> <input type="date"
+							class="form-control" id="nacimiento" th:field="*{nacimiento}"
+							name="nacimiento">
+					</div>
+					<br>
+					<div class="form-group">
+						<label for="nacimiento">Dirección</label> <input type="text"
+							class="form-control" id="direccn" th:field="*{direccn}"
+							name="direccn">
+					</div>
+					<br>
+					<div class="form-group">
+						<label for="email">E-Mail</label> <input type="email"
+							class="form-control" id="email" th:field="*{email}" name="email">
+					</div>
+					<br>
+					<div class="form-group">
+						<label for="telf">Telf.</label> <input type="text"
+							class="form-control" id="telf" th:field="*{telf}" name="telf">
+					</div>
+					<br>
+					<button type="submit" class="btn btn-success">Guardar</button>
+					<button type="submit" class="btn btn-warning"
+						th:formaction="@{/especialistas/volver}" th:method="post">Cancelar</button>
+				</form>
 			</div>
+			<div class="col"></div>
 		</div>
-		<div class="row" style="min-height: 120px;"></div>
+		<div class="row" style="min-height: 20px;"></div>
 	</div>
-	</div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
 </body>

@@ -70,6 +70,18 @@
 					<dd class="col-sm-9">
 						<p th:text="${inscrito.modalidad}"></p>
 					</dd>
+					<dt class="col-sm-3">Contacto</dt>
+					<dd class="col-sm-9">
+						<p th:text="${contacto.nmbrs}+' '+${contacto.apllds}"></p>
+						<p th:text="'E-mail: '+${contacto.email}"></p>
+						<p th:text="'Telf.: '+${contacto.telf}"></p>
+					</dd>
+					<dt class="col-sm-3">Especialista</dt>
+					<dd class="col-sm-9">
+						<p th:text="${especialista.nmbrs}+' '+${especialista.apllds}"></p>
+						<p th:text="'E-mail: '+${especialista.email}"></p>
+						<p th:text="'Telf.: '+${especialista.telf}"></p>
+					</dd>
 				</dl>
 				<div></div>
 			</div>

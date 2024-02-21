@@ -41,7 +41,7 @@
 		<div class="row" style="min-height: 120px;"></div>
 		<div class="row">
 			<div class="col"></div>
-			<div class="col" style="min-width: 60%;">
+			<div class="col" style="min-width: 80%;">
 				<div th:if="${list.isEmpty()}">
 					<h4>Se necesita registrar especialistas</h4>
 					<br>
@@ -52,6 +52,10 @@
 				<div th:if="${!list.isEmpty()}">
 					<h4>Registro de especialistas</h4>
 					<br>
+					<p
+						th:text="${texto} ?:
+						'Puedes ver o editar cualquier especialista
+						registrados hasta la fecha'"></p>
 					<table class="table table-sm">
 						<thead>
 							<tr>
@@ -64,6 +68,7 @@
 								<th>Teléfono</th>
 								<th>Partc.</th>
 								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -72,24 +77,28 @@
 								<td th:text="${especialista.apllds}"></td>
 								<td th:text="${especialista.edad}"></td>
 								<td th:text="${especialista.dni}"></td>
-								<td th:text="${especialista.ruc}"></td>
+								<td
+									th:text="${especialista.ruc != ''} ? ${especialista.ruc} : '-'"></td>
 								<td th:text="${especialista.email}"></td>
 								<td th:text="${especialista.telf}"></td>
 								<td th:text="${#lists.size(especialista.inscritos)}"></td>
 								<td><a class="btn btn-info btn-sm"
 									th:href="@{/especialistas/{id}(id=${especialista.id})}">Ver</a>
 								</td>
+								<td><a class="btn btn-secondary btn-sm"
+									th:href="@{/especialistas/modificar/{id}(id=${especialista.id})}">Editar</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="d-flex">
-					<a th:href="@{/especialistas/0}" class="btn btn-primary">Agregar</a>
+					<a th:href="@{/especialistas/crear}" class="btn btn-primary btn-sm">Agregar</a>
 				</div>
 			</div>
 			<div class="col"></div>
 		</div>
-		<div class="row" style="min-height: 120px;"></div>
+		<div class="row" style="min-height: 60px;"></div>
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

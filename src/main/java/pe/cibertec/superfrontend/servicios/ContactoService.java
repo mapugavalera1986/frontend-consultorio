@@ -55,13 +55,6 @@ public class ContactoService implements IDatoService<Contacto> {
 	}
 
 	@Override
-	public String modificar(int id, Contacto cambiar) {
-		ResponseEntity<String> modificar = plantillaRest.postForEntity(baseUri + "contactos" + cambiar.getId(),
-				cambiar, String.class);
-		return modificar.getBody();
-	}
-
-	@Override
 	public String eliminar(int id) {
 		// TODO Auto-generated method stub
 		return null;
