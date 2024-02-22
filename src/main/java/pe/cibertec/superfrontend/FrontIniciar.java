@@ -14,10 +14,8 @@ public class FrontIniciar {
 		SpringApplication.run(FrontIniciar.class, args);
 		Mensaje.consola("El Front End ya podrá funcionar");
 	}
-	
 	@Bean
 	RestTemplate plantillaRest() {
 		return new RestTemplate();
 	}
-
 }
