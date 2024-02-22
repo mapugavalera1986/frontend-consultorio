@@ -54,7 +54,9 @@ public class EspecialistaService implements IDatoService<Especialista> {
 
 	@Override
 	public String eliminar(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		ResponseEntity<String> respuesta = plantillaRest.exchange(baseUri + "especialistas/" + id,
+				HttpMethod.DELETE, null, new ParameterizedTypeReference<String>() {
+				});
+		return respuesta.getStatusCode().toString();
 	}
 }

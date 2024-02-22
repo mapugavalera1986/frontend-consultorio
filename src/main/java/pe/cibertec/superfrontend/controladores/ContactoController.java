@@ -84,8 +84,8 @@ public class ContactoController implements IDatoController<Contacto> {
 		return new RedirectView("/contactos");
 	}
 
-	@PostMapping("/eliminar")
-	public RedirectView eliminar(int id, RedirectAttributes atributos) {
+	@PostMapping("/eliminar/{id}")
+	public RedirectView eliminar(@PathVariable("id") int id, RedirectAttributes atributos) {
 		String resultado = srvc_contactos.eliminar(id);
 		if (resultado.equals("200 OK")) {
 			atributos.addFlashAttribute("texto", "Eliminación exitosa");

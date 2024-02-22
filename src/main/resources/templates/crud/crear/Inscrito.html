@@ -103,6 +103,8 @@
 					<button type="submit" class="btn btn-success">Guardar</button>
 					<button type="submit" class="btn btn-warning"
 						th:formaction="@{/inscripciones/volver}" th:method="post">Cancelar</button>
+					<button th:if="${inscrito.id != 0}" type="submit" class="btn btn-danger"
+						th:formaction="@{/inscripciones/eliminar/{id}(id=${inscrito.id})}" th:method="post">Eliminar</button>
 				</form>
 			</div>
 			<div class="col"></div>

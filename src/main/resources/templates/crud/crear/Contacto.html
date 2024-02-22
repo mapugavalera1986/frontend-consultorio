@@ -66,6 +66,10 @@
 					<button type="submit" class="btn btn-success">Guardar</button>
 					<button type="submit" class="btn btn-warning"
 						th:formaction="@{/contactos/volver}" th:method="post">Cancelar</button>
+					<button th:if="${!contacto.inscritos.empty and contacto.id != 0}" type="submit" class="btn btn-danger"
+						th:formaction="@{/contactos/eliminar/{id}(id=${contacto.id})}" th:method="post" disabled>Eliminar</button>
+					<button th:if="${contacto.inscritos.empty and contacto.id != 0}" type="submit" class="btn btn-danger"
+						th:formaction="@{/contactos/eliminar/{id}(id=${contacto.id})}" th:method="post">Eliminar</button>
 				</form>
 			</div>
 			<div class="col"></div>

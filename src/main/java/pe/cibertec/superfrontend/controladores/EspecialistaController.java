@@ -16,7 +16,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import pe.cibertec.superfrontend.controladores.interfaz.IDatoController;
 import pe.cibertec.superfrontend.modelos.Especialista;
 import pe.cibertec.superfrontend.servicios.EspecialistaService;
-import pe.cibertec.superfrontend.xtra.Mensaje;
 
 @Controller
 @RequestMapping("/especialistas")
@@ -85,8 +84,8 @@ public class EspecialistaController implements IDatoController<Especialista> {
 		return new RedirectView("/especialistas");
 	}
 
-	@PostMapping("/eliminar")
-	public RedirectView eliminar(int id, RedirectAttributes atributos) {
+	@PostMapping("/eliminar/{id}")
+	public RedirectView eliminar(@PathVariable("id") int id, RedirectAttributes atributos) {
 		String resultado = srvc_especialistas.eliminar(id);
 		if (resultado.equals("200 OK")) {
 			atributos.addFlashAttribute("texto", "Eliminación exitosa");

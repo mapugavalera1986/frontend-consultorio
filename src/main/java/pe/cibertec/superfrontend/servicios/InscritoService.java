@@ -54,8 +54,10 @@ public class InscritoService implements IDatoService<Inscrito> {
 
 	@Override
 	public String eliminar(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		ResponseEntity<String> respuesta = plantillaRest.exchange(baseUri + "inscripciones/" + id,
+				HttpMethod.DELETE, null, new ParameterizedTypeReference<String>() {
+				});
+		return respuesta.getStatusCode().toString();
 	}
 }
 

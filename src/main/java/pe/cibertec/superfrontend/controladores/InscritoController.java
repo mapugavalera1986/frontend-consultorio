@@ -115,8 +115,8 @@ public class InscritoController implements IDatoController<Inscrito> {
 		return new RedirectView("/inscripciones");
 	}
 
-	@PostMapping("/eliminar")
-	public RedirectView eliminar(int id, RedirectAttributes atributos) {
+	@PostMapping("/eliminar/{id}")
+	public RedirectView eliminar(@PathVariable("id") int id, RedirectAttributes atributos) {
 		String resultado = srvc_inscritos.eliminar(id);
 		if (resultado.equals("200 OK")) {
 			atributos.addFlashAttribute("texto", "Eliminación exitosa");
