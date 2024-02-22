@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import pe.cibertec.superfrontend.modelos.Especialista;
 import pe.cibertec.superfrontend.servicios.interfaz.IDatoService;
-import pe.cibertec.superfrontend.xtra.Mensaje;
 
 @Service
 public class EspecialistaService implements IDatoService<Especialista> {

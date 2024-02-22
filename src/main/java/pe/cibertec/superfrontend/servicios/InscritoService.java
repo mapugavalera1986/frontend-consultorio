@@ -49,7 +49,7 @@ public class InscritoService implements IDatoService<Inscrito> {
 	@Override
 	public String agregar(Inscrito nuevo) {
 		ResponseEntity<String> agregar = plantillaRest.postForEntity(baseUri + "inscripciones", nuevo, String.class);
-		return agregar.getBody();
+		return agregar.getStatusCode().toString();
 	}
 
 	@Override
