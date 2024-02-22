@@ -60,6 +60,7 @@
 								<th>DNI</th>
 								<th>E-Mail.</th>
 								<th>Teléfono</th>
+								<th>Modalidad</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -71,6 +72,7 @@
 								<td th:text="${inscrito.dni != ''} ? ${inscrito.dni} : '-'"></td>
 								<td th:text="${inscrito.email != ''} ? ${inscrito.email} : '-'"></td>
 								<td th:text="${inscrito.telf != ''} ? ${inscrito.telf} : '-'"></td>
+								<td th:text="${inscrito.modalidad}"></td>
 								<td><a class="btn btn-info btn-sm"
 									th:href="@{/inscripciones/{id}(id=${inscrito.id})}">Ver</a>
 								</td>

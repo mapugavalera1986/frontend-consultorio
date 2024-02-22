@@ -1,5 +1,6 @@
 package pe.cibertec.superfrontend.controladores;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,15 @@ public class InscritoController implements IDatoController<Inscrito> {
 
 	@Autowired
 	private EspecialistaService srvc_especialistas;// Igual que arriba
+	
+	//Si hay un método mejor para enumerar, hay que ponerlo. Pero ya no hay tiempo.
+	private List<String> enumerarModalidad() {
+		List<String> previa_modalidades = new LinkedList<String>();
+		for(Modalidad modalidad : Modalidad.values()) {
+			previa_modalidades.add(modalidad.toString());
+		}
+		return previa_modalidades;
+	}
 
 	@GetMapping
 	public ModelAndView inicio(ModelMap m) {
@@ -60,6 +70,7 @@ public class InscritoController implements IDatoController<Inscrito> {
 	public ModelAndView formularioCrear(ModelMap m) {
 		Inscrito nuevo = new Inscrito();
 		m.addAttribute("inscrito", nuevo);
+		m.addAttribute("modalidades", enumerarModalidad());
 		m.addAttribute("contactos", srvc_contactos.listarTodo()); //Estos son para el formulario
 		m.addAttribute("especialistas", srvc_especialistas.listarTodo()); //Recuerda sus nombres
 		return new ModelAndView("crud/crear/Inscrito", m);
@@ -71,6 +82,7 @@ public class InscritoController implements IDatoController<Inscrito> {
 		Inscrito cambiar = srvc_inscritos.obtener(id);
 		if (!cambiar.equals(empty)) {
 			m.addAttribute("inscrito", cambiar);
+			m.addAttribute("modalidades", enumerarModalidad());
 			m.addAttribute("contactos", srvc_contactos.listarTodo()); //Estos son para el formulario
 			m.addAttribute("especialistas", srvc_especialistas.listarTodo()); //Recuerda sus nombres
 			return new ModelAndView("crud/crear/Inscrito", m);
@@ -82,24 +94,24 @@ public class InscritoController implements IDatoController<Inscrito> {
 	@PostMapping("/crear")
 	public RedirectView crear(Inscrito nuevo, RedirectAttributes atributos) {
 		Mensaje.consola(nuevo.toString());
-		/*String resultado = srvc_inscritos.agregar(nuevo);
+		String resultado = srvc_inscritos.agregar(nuevo);
 		if (resultado.equals("200 OK")) {
 			atributos.addFlashAttribute("texto", "¡Se agregó con éxito!");
 		} else {
 			atributos.addFlashAttribute("texto", "No se pudo crear; intenta de nuevo");
-		}*/
+		}
 		return new RedirectView("/inscripciones");
 	}
 
 	@PostMapping("/modificar")
 	public RedirectView modificar(Inscrito cambiar, RedirectAttributes atributos) {
 		Mensaje.consola(cambiar.toString());
-		/*String resultado = srvc_inscritos.agregar(cambiar);
+		String resultado = srvc_inscritos.agregar(cambiar);
 		if (resultado.equals("200 OK")) {
 			atributos.addFlashAttribute("texto", "¡Se modificó con éxito!");
 		} else {
 			atributos.addFlashAttribute("texto", "No se pudo modificar; intenta de nuevo");
-		}*/
+		}
 		return new RedirectView("/inscripciones");
 	}
 

@@ -76,6 +76,14 @@
 					</div>
 					<br>
 					<div class="form-group blu-margin">
+						<label for="contacto_id">Elegir modalidad preferido</label><select
+							class="form-control" th:field="*{modalidad}" id="modalidad">
+							<option th:each="m : ${modalidades}" th:value="${m}"
+								th:text="'Modalidad: ' + ${m}"></option>
+						</select>
+					</div>
+					<br>
+					<div class="form-group blu-margin">
 						<label for="contacto_id">Elegir contacto</label><select
 							class="form-control" th:field="*{contacto_id}" id="contacto_id">
 							<option th:each="ec : ${contactos}" th:value="${ec.id}"
