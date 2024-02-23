@@ -1,5 +1,7 @@
 package pe.cibertec.superfrontend.controladores;
 
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.lowagie.text.DocumentException;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import pe.cibertec.superfrontend.controladores.interfaz.IDatoController;
 import pe.cibertec.superfrontend.modelos.Contacto;
 import pe.cibertec.superfrontend.servicios.ContactoService;
+import pe.cibertec.superfrontend.utilidades.ContactoPdfs;
 
 @Controller
 @RequestMapping("/contactos")
@@ -25,9 +32,10 @@ public class ContactoController implements IDatoController<Contacto> {
 	private ContactoService srvc_contactos;
 
 	@GetMapping
-	public ModelAndView inicio(ModelMap m) {
+	public ModelAndView inicio(HttpSession s, ModelMap m) {
 		List<Contacto> listar_todo = srvc_contactos.listarTodo();
 		m.addAttribute("list", listar_todo);
+		s.setAttribute("listado", listar_todo);//Esta es para generar el PDF
 		return new ModelAndView("crud/Contactos", m);
 	}
 
@@ -101,4 +109,32 @@ public class ContactoController implements IDatoController<Contacto> {
 		return new ModelAndView("redirect:/contactos");
 	}
 
+	//Métodos ULTRA experimentales para generar PDF
+	@SuppressWarnings("unchecked")
+	@GetMapping("/pdf")
+	public void crearListaPdf(HttpSession s, HttpServletResponse respuesta) throws DocumentException, IOException {
+		List<Contacto> listado = new LinkedList<Contacto>();
+		if(s.getAttribute("listado") == null) {
+			listado = srvc_contactos.listarTodo();
+		} else {
+			listado = (List<Contacto>) s.getAttribute("listado");
+		}
+		respuesta.setContentType("application/pdf");
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=lista_contactos.pdf";
+		respuesta.setHeader(headerkey, headervalue);
+		ContactoPdfs generador = new ContactoPdfs();
+		generador.crearGrupal(listado, respuesta);
+	}
+
+	@GetMapping("/{id}/pdf")
+	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta) throws DocumentException, IOException {
+		Contacto imprimir = srvc_contactos.obtener(id);
+		respuesta.setContentType("application/pdf");
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=contacto_"+imprimir.getId() + ".pdf";
+		respuesta.setHeader(headerkey, headervalue);
+		ContactoPdfs generador = new ContactoPdfs();
+		generador.crearIndividual(imprimir, respuesta);
+	}
 }

@@ -16,8 +16,7 @@
 		style="background-color: #e3f2fd;">
 		<div class="container-fluid">
 			<a th:href="@{/}" class="navbar-brand"> <img
-				th:src="@{images/Tango_icon_nature.svg}" height="28"
-				alt="Inicio">
+				th:src="@{images/Tango_icon_nature.svg}" height="28" alt="Inicio">
 			</a>
 			<button type="button" class="navbar-toggler"
 				data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -76,17 +75,30 @@
 								<td th:text="${contacto.email}"></td>
 								<td th:text="${contacto.telf}"></td>
 								<td th:text="${#lists.size(contacto.inscritos)}"></td>
-								<td><a class="btn btn-info btn-sm"
-									th:href="@{/contactos/{id}(id=${contacto.id})}">Ver</a></td>
-								<td><a class="btn btn-secondary btn-sm"
-									th:href="@{/contactos/modificar/{id}(id=${contacto.id})}">Editar</a>
-								</td>
+								<td><form>
+										<button type="submit" class="btn btn-info btn-sm"
+											th:formaction="@{/contactos/{id}(id=${contacto.id})}"
+											th:method="get">Ver</button>
+									</form></td>
+								<td><form>
+										<button type="submit" class="btn btn-secondary btn-sm"
+											th:formaction="@{/contactos/modificar/{id}(id=${contacto.id})}"
+											th:method="get">Editar</button>
+									</form></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="d-flex">
-					<a th:href="@{/contactos/crear}" class="btn btn-primary btn-sm">Agregar</a>
+					<form>
+						<button type="submit" class="btn btn-primary btn-sm"
+							style="margin-right: 8px" th:formaction="@{/contactos/crear}"
+							th:method="get">Agregar</button>
+						<button th:if="${!list.isEmpty()}" type="submit"
+							class="btn btn-info btn-sm" style="margin-right: 8px"
+							th:formaction="@{/contactos/pdf}" th:method="get">Descargar
+							PDF</button>
+					</form>
 				</div>
 			</div>
 			<div class="col"></div>

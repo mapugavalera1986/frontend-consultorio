@@ -80,9 +80,9 @@
 							class="form-control" id="telf" th:field="*{telf}" name="telf">
 					</div>
 					<br>
-					<button type="submit" class="btn btn-success">Guardar</button>
+					<button type="submit" class="btn btn-success" style="margin-right: 8px">Guardar</button>
 					<button type="submit" class="btn btn-warning"
-						th:formaction="@{/especialistas/volver}" th:method="post">Cancelar</button>
+						th:formaction="@{/especialistas/volver}" style="margin-right: 32px" th:method="post">Cancelar</button>
 					<button th:if="${!especialista.inscritos.empty and especialista.id != 0}" type="submit" class="btn btn-danger"
 						th:formaction="@{/especialistas/eliminar/{id}(id=${especialista.id})}" th:method="post" disabled>Eliminar</button>
 					<button th:if="${especialista.inscritos.empty and especialista.id != 0}" type="submit" class="btn btn-danger"

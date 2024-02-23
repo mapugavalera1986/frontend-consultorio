@@ -16,8 +16,7 @@
 		style="background-color: #e3f2fd;">
 		<div class="container-fluid">
 			<a th:href="@{/}" class="navbar-brand"> <img
-				th:src="@{images/Tango_icon_nature.svg}" height="28"
-				alt="Inicio">
+				th:src="@{images/Tango_icon_nature.svg}" height="28" alt="Inicio">
 			</a>
 			<button type="button" class="navbar-toggler"
 				data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -44,8 +43,8 @@
 				<div th:if="${list.isEmpty()}">
 					<h4>No se ha inscrito participantes</h4>
 					<br>
-					<p>Puedes inscribir participantes utilizando los
-						botones en la parte posterior.</p>
+					<p>Puedes inscribir participantes utilizando los botones en la
+						parte posterior.</p>
 					<br>
 				</div>
 				<div th:if="${!list.isEmpty()}">
@@ -78,19 +77,30 @@
 								<td th:text="${inscrito.email != ''} ? ${inscrito.email} : '-'"></td>
 								<td th:text="${inscrito.telf != ''} ? ${inscrito.telf} : '-'"></td>
 								<td th:text="${inscrito.modalidad}"></td>
-								<td><a class="btn btn-info btn-sm"
-									th:href="@{/inscripciones/{id}(id=${inscrito.id})}">Ver</a>
-								</td>
-								<td><a class="btn btn-secondary btn-sm"
-									th:href="@{/inscripciones/modificar/{id}(id=${inscrito.id})}">Editar</a>
-								</td>
+								<td><form>
+										<button type="submit" class="btn btn-info btn-sm"
+											th:formaction="@{/inscripciones/{id}(id=${inscrito.id})}"
+											th:method="get">Ver</button>
+									</form></td>
+								<td><form>
+										<button type="submit" class="btn btn-secondary btn-sm"
+											th:formaction="@{/inscripciones/modificar/{id}(id=${inscrito.id})}"
+											th:method="get">Editar</button>
+									</form></td>
 							</tr>
 						</tbody>
 					</table>
-
 				</div>
 				<div class="d-flex">
-					<a th:href="@{/inscripciones/crear}" class="btn btn-primary btn-sm">Agregar</a>
+					<form>
+						<button type="submit" class="btn btn-primary btn-sm"
+							style="margin-right: 8px" th:formaction="@{/inscripciones/crear}"
+							th:method="get">Agregar</button>
+						<button th:if="${!list.isEmpty()}" type="submit"
+							class="btn btn-info btn-sm" style="margin-right: 8px"
+							th:formaction="@{/inscripciones/pdf}" th:method="get">Descargar
+							PDF</button>
+					</form>
 				</div>
 			</div>
 			<div class="col"></div>

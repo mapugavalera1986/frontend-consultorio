@@ -1,5 +1,6 @@
 package pe.cibertec.superfrontend.controladores;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,12 +15,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.lowagie.text.DocumentException;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import pe.cibertec.superfrontend.controladores.interfaz.IDatoController;
 import pe.cibertec.superfrontend.modelos.Inscrito;
 import pe.cibertec.superfrontend.modelos.Modalidad;
 import pe.cibertec.superfrontend.servicios.ContactoService;
 import pe.cibertec.superfrontend.servicios.EspecialistaService;
 import pe.cibertec.superfrontend.servicios.InscritoService;
+import pe.cibertec.superfrontend.utilidades.InscritoPdfs;
 import pe.cibertec.superfrontend.xtra.Mensaje;
 
 @Controller
@@ -45,9 +51,10 @@ public class InscritoController implements IDatoController<Inscrito> {
 	}
 
 	@GetMapping
-	public ModelAndView inicio(ModelMap m) {
+	public ModelAndView inicio(HttpSession s, ModelMap m) {
 		List<Inscrito> listar_todo = srvc_inscritos.listarTodo();
 		m.addAttribute("list", listar_todo);
+		s.setAttribute("listado", listar_todo);
 		return new ModelAndView("crud/Inscritos", m);
 	}
 
@@ -64,7 +71,6 @@ public class InscritoController implements IDatoController<Inscrito> {
 			return new ModelAndView("redirect:/inscripciones");
 		}
 	}
-	
 
 	@GetMapping("/crear")
 	public ModelAndView formularioCrear(ModelMap m) {
@@ -130,5 +136,34 @@ public class InscritoController implements IDatoController<Inscrito> {
 	@PostMapping("/volver")
 	public ModelAndView volver() {
 		return new ModelAndView("redirect:/inscripciones");
+	}
+	
+	//Métodos ULTRA experimentales para generar PDF
+	@SuppressWarnings("unchecked")
+	@GetMapping("/pdf")
+	public void crearListaPdf(HttpSession s, HttpServletResponse respuesta) throws DocumentException, IOException {
+		List<Inscrito> listado = new LinkedList<Inscrito>();
+		if(s.getAttribute("listado") == null) {
+			listado = srvc_inscritos.listarTodo();
+		} else {
+			listado = (List<Inscrito>) s.getAttribute("listado");
+		}
+		respuesta.setContentType("application/pdf");
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=lista_inscritos.pdf";
+		respuesta.setHeader(headerkey, headervalue);
+		InscritoPdfs generador = new InscritoPdfs();
+		generador.crearGrupal(listado, respuesta);
+	}
+
+	@GetMapping("/{id}/pdf")
+	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta) throws DocumentException, IOException {
+		Inscrito imprimir = srvc_inscritos.obtener(id);
+		respuesta.setContentType("application/pdf");
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=participante_"+imprimir.getId() + ".pdf";
+		respuesta.setHeader(headerkey, headervalue);
+		InscritoPdfs generador = new InscritoPdfs();
+		generador.crearIndividual(imprimir, respuesta);
 	}
 }

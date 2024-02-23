@@ -14,7 +14,7 @@ public class Inscrito {
 	private int id;
 	private String nmbrs;
 	private String apllds;
-	private String nacimiento;
+	private String nacimiento = "2010-01-01";
 	private int edad;
 	private String dni ="";
 	private String direccn;

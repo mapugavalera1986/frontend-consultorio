@@ -64,7 +64,8 @@
 					</dd>
 					<dt class="col-sm-3">Teléfono</dt>
 					<dd class="col-sm-9">
-						<p th:text="${inscrito.telf != ''} ? ${inscrito.email} : '(no registrado)'"></p>
+						<p
+							th:text="${inscrito.telf != ''} ? ${inscrito.email} : '(no registrado)'"></p>
 					</dd>
 					<dt class="col-sm-3">Modalidad</dt>
 					<dd class="col-sm-9">
@@ -88,11 +89,17 @@
 			</div>
 			<div class="col"></div>
 		</div>
-		<div class="row" >
+		<div class="row">
 			<div class="col"></div>
-			<div class="col d-flex justify-content-center">
-				<a class="btn btn-info btn-sm"
-					th:href="@{/inscripciones}">Regresar</a>
+			<div class="col">
+				<form>
+					<button type="submit" class="btn btn-primary btn-sm"
+						style="margin-right: 8px" th:formaction="@{/inscripciones}"
+						th:method="get">Regresar</button>
+					<button type="submit" class="btn btn-info btn-sm"
+						th:formaction="@{/inscripciones/{id}/pdf(id=${inscrito.id})}"
+						th:method="get">Descargar PDF</button>
+				</form>
 			</div>
 			<div class="col"></div>
 		</div>

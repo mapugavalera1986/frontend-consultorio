@@ -17,7 +17,7 @@ public class Especialista {
 	private int id;
 	private String nmbrs;
 	private String apllds;
-	private String nacimiento;
+	private String nacimiento = "2000-01-01";
 	private int edad;
 	private String dni;
 	private String ruc = "";

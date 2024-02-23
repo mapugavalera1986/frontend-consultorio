@@ -1,5 +1,7 @@
 package pe.cibertec.superfrontend.controladores;
 
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.lowagie.text.DocumentException;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import pe.cibertec.superfrontend.controladores.interfaz.IDatoController;
 import pe.cibertec.superfrontend.modelos.Especialista;
 import pe.cibertec.superfrontend.servicios.EspecialistaService;
+import pe.cibertec.superfrontend.utilidades.EspecialistaPdfs;
 
 @Controller
 @RequestMapping("/especialistas")
@@ -25,9 +32,10 @@ public class EspecialistaController implements IDatoController<Especialista> {
 	private EspecialistaService srvc_especialistas;
 
 	@GetMapping
-	public ModelAndView inicio(ModelMap m) {
+	public ModelAndView inicio(HttpSession s, ModelMap m) {
 		List<Especialista> listar_todo = srvc_especialistas.listarTodo();
 		m.addAttribute("list", listar_todo);
+		s.setAttribute("listado", listar_todo);
 		return new ModelAndView("crud/Especialistas", m);
 	}
 
@@ -99,5 +107,34 @@ public class EspecialistaController implements IDatoController<Especialista> {
 	@PostMapping("/volver")
 	public ModelAndView volver() {
 		return new ModelAndView("redirect:/especialistas");
+	}
+
+	//Métodos ULTRA experimentales para generar PDF
+	@SuppressWarnings("unchecked")
+	@GetMapping("/pdf")
+	public void crearListaPdf(HttpSession s, HttpServletResponse respuesta) throws DocumentException, IOException {
+		List<Especialista> listado = new LinkedList<Especialista>();
+		if(s.getAttribute("listado") == null) {
+			listado = srvc_especialistas.listarTodo();
+		} else {
+			listado = (List<Especialista>) s.getAttribute("listado");
+		}
+		respuesta.setContentType("application/pdf");
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=lista_especialistas.pdf";
+		respuesta.setHeader(headerkey, headervalue);
+		EspecialistaPdfs generador = new EspecialistaPdfs();
+		generador.crearGrupal(listado, respuesta);
+	}
+
+	@GetMapping("/{id}/pdf")
+	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta) throws DocumentException, IOException {
+		Especialista imprimir = srvc_especialistas.obtener(id);
+		respuesta.setContentType("application/pdf");
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=especialista_"+imprimir.getId() + ".pdf";
+		respuesta.setHeader(headerkey, headervalue);
+		EspecialistaPdfs generador = new EspecialistaPdfs();
+		generador.crearIndividual(imprimir, respuesta);
 	}
 }

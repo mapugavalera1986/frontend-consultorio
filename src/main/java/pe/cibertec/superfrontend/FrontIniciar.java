@@ -10,12 +10,13 @@ import pe.cibertec.superfrontend.xtra.Mensaje;
 @SpringBootApplication
 public class FrontIniciar {
 	
-	public static void main(String[] args) {
-		SpringApplication.run(FrontIniciar.class, args);
-		Mensaje.consola("El Front End ya podrá funcionar");
-	}
 	@Bean
 	RestTemplate plantillaRest() {
 		return new RestTemplate();
+	}
+	
+	public static void main(String[] args) {
+		SpringApplication.run(FrontIniciar.class, args);
+		Mensaje.consola("El Front End ya podrá funcionar");
 	}
 }

@@ -89,9 +89,15 @@
 		</div>
 		<div class="row">
 			<div class="col"></div>
-			<div class="col d-flex justify-content-center">
-				<a class="btn btn-info btn-sm"
-					th:href="@{/especialistas}">Regresar</a>
+			<div class="col">
+				<form>
+					<button type="submit" class="btn btn-primary btn-sm"
+						style="margin-right: 8px" th:formaction="@{/especialistas}"
+						th:method="get">Regresar</button>
+					<button type="submit" class="btn btn-info btn-sm"
+						th:formaction="@{/especialistas/{id}/pdf(id=${especialista.id})}"
+						th:method="get">Descargar PDF</button>
+				</form>
 			</div>
 			<div class="col"></div>
 		</div>
