@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpSession;
 public interface IDatoController<T> {
 	public ModelAndView inicio(HttpSession s, ModelMap m);
 	public ModelAndView obtener(int id, ModelMap m);
+	public ModelAndView formularioBuscar(String buscar);
+	public RedirectView encontrar(String buscar, RedirectAttributes atributos);
 	public ModelAndView formularioCrear(ModelMap m);
 	public ModelAndView formularioModificar(int id, ModelMap m);
 	public RedirectView crear(T nuevo, RedirectAttributes a);

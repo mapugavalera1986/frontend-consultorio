@@ -59,4 +59,17 @@ public class EspecialistaService implements IDatoService<Especialista> {
 				});
 		return respuesta.getStatusCode().toString();
 	}
+
+	@Override
+	public List<Especialista> buscar(String buscar) {
+		try {
+			ResponseEntity<List<Especialista>> respuesta = plantillaRest.exchange(
+					baseUri + "especialistas/buscar?buscar=" + buscar, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<Especialista>>() {
+					});
+			return respuesta.getBody();
+		} catch (Exception e) {
+			return new LinkedList<Especialista>();
+		}
+	}
 }

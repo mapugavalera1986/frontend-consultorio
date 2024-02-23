@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -31,11 +32,17 @@ public class EspecialistaController implements IDatoController<Especialista> {
 	@Autowired
 	private EspecialistaService srvc_especialistas;
 
+	@SuppressWarnings("unchecked")
 	@GetMapping
 	public ModelAndView inicio(HttpSession s, ModelMap m) {
-		List<Especialista> listar_todo = srvc_especialistas.listarTodo();
-		m.addAttribute("list", listar_todo);
-		s.setAttribute("listado", listar_todo);
+		List<Especialista> listar_especialistas = new LinkedList<Especialista>();
+		if (m.getAttribute("list") == null) {
+			listar_especialistas = srvc_especialistas.listarTodo();
+		} else {
+			listar_especialistas = (List<Especialista>) m.getAttribute("list");
+		}
+		m.addAttribute("list", listar_especialistas);
+		s.setAttribute("listado", listar_especialistas);
 		return new ModelAndView("crud/Especialistas", m);
 	}
 
@@ -49,6 +56,21 @@ public class EspecialistaController implements IDatoController<Especialista> {
 		} else {
 			return new ModelAndView("redirect:/especialistas");
 		}
+	}
+
+	// Se supone que aquí se realizan las búsquedas.
+	// Por ahora, serán de nombre y apellido
+	@GetMapping("/buscar")
+	public ModelAndView formularioBuscar(String buscar) {
+		return new ModelAndView("crud/buscar/BuscaEspecialistas");
+	}
+
+	@PostMapping("/buscar")
+	public RedirectView encontrar(@RequestParam String buscar, RedirectAttributes atributos) {
+		List<Especialista> lista_buscar = srvc_especialistas.buscar(buscar);
+		atributos.addFlashAttribute("list", lista_buscar);
+		atributos.addFlashAttribute("texto", "Resultados de la búsqueda: " + lista_buscar.size());
+		return new RedirectView("/especialistas");
 	}
 
 	@GetMapping("/crear")
@@ -103,18 +125,18 @@ public class EspecialistaController implements IDatoController<Especialista> {
 		}
 		return new RedirectView("/especialistas");
 	}
-	
+
 	@PostMapping("/volver")
 	public ModelAndView volver() {
 		return new ModelAndView("redirect:/especialistas");
 	}
 
-	//Métodos ULTRA experimentales para generar PDF
+	// Métodos ULTRA experimentales para generar PDF
 	@SuppressWarnings("unchecked")
 	@GetMapping("/pdf")
 	public void crearListaPdf(HttpSession s, HttpServletResponse respuesta) throws DocumentException, IOException {
 		List<Especialista> listado = new LinkedList<Especialista>();
-		if(s.getAttribute("listado") == null) {
+		if (s.getAttribute("listado") == null) {
 			listado = srvc_especialistas.listarTodo();
 		} else {
 			listado = (List<Especialista>) s.getAttribute("listado");
@@ -128,11 +150,12 @@ public class EspecialistaController implements IDatoController<Especialista> {
 	}
 
 	@GetMapping("/{id}/pdf")
-	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta) throws DocumentException, IOException {
+	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta)
+			throws DocumentException, IOException {
 		Especialista imprimir = srvc_especialistas.obtener(id);
 		respuesta.setContentType("application/pdf");
 		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=especialista_"+imprimir.getId() + ".pdf";
+		String headervalue = "attachment; filename=especialista_" + imprimir.getId() + ".pdf";
 		respuesta.setHeader(headerkey, headervalue);
 		EspecialistaPdfs generador = new EspecialistaPdfs();
 		generador.crearIndividual(imprimir, respuesta);

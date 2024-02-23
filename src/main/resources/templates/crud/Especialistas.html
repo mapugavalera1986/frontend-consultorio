@@ -100,11 +100,15 @@
 							style="margin-right: 8px" th:formaction="@{/especialistas/crear}"
 							th:method="get">Agregar</button>
 						<button th:if="${!list.isEmpty()}" type="submit"
-							class="btn btn-info btn-sm" style="margin-right: 8px"
+							class="btn btn-info btn-sm" style="margin-right: 64px"
 							th:formaction="@{/especialistas/pdf}" th:method="get">Descargar
 							PDF</button>
+						<button th:if="${!list.isEmpty()}" type="submit"
+							class="btn btn-secondary btn-sm float-end"
+							th:formaction="@{/especialistas/buscar}" th:method="get">Buscar
+							especialistas</button>
 					</form>
-				</div>	
+				</div>
 			</div>
 			<div class="col"></div>
 		</div>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -31,11 +32,17 @@ public class ContactoController implements IDatoController<Contacto> {
 	@Autowired
 	private ContactoService srvc_contactos;
 
+	@SuppressWarnings("unchecked")
 	@GetMapping
 	public ModelAndView inicio(HttpSession s, ModelMap m) {
-		List<Contacto> listar_todo = srvc_contactos.listarTodo();
-		m.addAttribute("list", listar_todo);
-		s.setAttribute("listado", listar_todo);//Esta es para generar el PDF
+		List<Contacto> listar_contactos = new LinkedList<Contacto>();
+		if (m.getAttribute("list") == null) {
+			listar_contactos = srvc_contactos.listarTodo();
+		} else {
+			listar_contactos = (List<Contacto>) m.getAttribute("list");
+		}
+		m.addAttribute("list", listar_contactos);
+		s.setAttribute("listado", listar_contactos);
 		return new ModelAndView("crud/Contactos", m);
 	}
 
@@ -43,12 +50,27 @@ public class ContactoController implements IDatoController<Contacto> {
 	public ModelAndView obtener(@PathVariable("id") int id, ModelMap m) {
 		Contacto empty = new Contacto();
 		Contacto obtener = srvc_contactos.obtener(id);
-		if(!obtener.equals(empty)) {
+		if (!obtener.equals(empty)) {
 			m.addAttribute("contacto", obtener);
 			return new ModelAndView("crud/visualizar/Contacto", m);
-		}else {
+		} else {
 			return new ModelAndView("redirect:/contactos");
 		}
+	}
+
+	// Se supone que aquí se realizan las búsquedas.
+	// Por ahora, serán de nombre y apellido
+	@GetMapping("/buscar")
+	public ModelAndView formularioBuscar(String buscar) {
+		return new ModelAndView("crud/buscar/BuscaContactos");
+	}
+
+	@PostMapping("/buscar")
+	public RedirectView encontrar(@RequestParam String buscar, RedirectAttributes atributos) {
+		List<Contacto> lista_buscar = srvc_contactos.buscar(buscar);
+		atributos.addFlashAttribute("list", lista_buscar);
+		atributos.addFlashAttribute("texto", "Resultados de la búsqueda: " + lista_buscar.size());
+		return new RedirectView("/contactos");
 	}
 
 	@GetMapping("/crear")
@@ -103,18 +125,18 @@ public class ContactoController implements IDatoController<Contacto> {
 		}
 		return new RedirectView("/contactos");
 	}
-	
+
 	@PostMapping("/volver")
 	public ModelAndView volver() {
 		return new ModelAndView("redirect:/contactos");
 	}
 
-	//Métodos ULTRA experimentales para generar PDF
+	// Métodos ULTRA experimentales para generar PDF
 	@SuppressWarnings("unchecked")
 	@GetMapping("/pdf")
 	public void crearListaPdf(HttpSession s, HttpServletResponse respuesta) throws DocumentException, IOException {
 		List<Contacto> listado = new LinkedList<Contacto>();
-		if(s.getAttribute("listado") == null) {
+		if (s.getAttribute("listado") == null) {
 			listado = srvc_contactos.listarTodo();
 		} else {
 			listado = (List<Contacto>) s.getAttribute("listado");
@@ -128,11 +150,12 @@ public class ContactoController implements IDatoController<Contacto> {
 	}
 
 	@GetMapping("/{id}/pdf")
-	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta) throws DocumentException, IOException {
+	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta)
+			throws DocumentException, IOException {
 		Contacto imprimir = srvc_contactos.obtener(id);
 		respuesta.setContentType("application/pdf");
 		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=contacto_"+imprimir.getId() + ".pdf";
+		String headervalue = "attachment; filename=contacto_" + imprimir.getId() + ".pdf";
 		respuesta.setHeader(headerkey, headervalue);
 		ContactoPdfs generador = new ContactoPdfs();
 		generador.crearIndividual(imprimir, respuesta);

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -40,25 +41,31 @@ public class InscritoController implements IDatoController<Inscrito> {
 
 	@Autowired
 	private EspecialistaService srvc_especialistas;// Igual que arriba
-	
-	//Si hay un método mejor para enumerar, hay que ponerlo. Pero ya no hay tiempo.
+
+	// Si hay un método mejor para enumerar, hay que ponerlo. Pero ya no hay tiempo.
 	private List<String> enumerarModalidad() {
 		List<String> previa_modalidades = new LinkedList<String>();
-		for(Modalidad modalidad : Modalidad.values()) {
+		for (Modalidad modalidad : Modalidad.values()) {
 			previa_modalidades.add(modalidad.toString());
 		}
 		return previa_modalidades;
 	}
 
+	@SuppressWarnings("unchecked")
 	@GetMapping
 	public ModelAndView inicio(HttpSession s, ModelMap m) {
-		List<Inscrito> listar_todo = srvc_inscritos.listarTodo();
-		m.addAttribute("list", listar_todo);
-		s.setAttribute("listado", listar_todo);
+		List<Inscrito> listar_inscritos = new LinkedList<Inscrito>();
+		if (m.getAttribute("list") == null) {
+			listar_inscritos = srvc_inscritos.listarTodo();
+		} else {
+			listar_inscritos = (List<Inscrito>) m.getAttribute("list");
+		}
+		m.addAttribute("list", listar_inscritos);
+		s.setAttribute("listado", listar_inscritos);
 		return new ModelAndView("crud/Inscritos", m);
 	}
 
-	@GetMapping("/{id}")//Se buscarán el contacto y especialistas del participante
+	@GetMapping("/{id}") // Se buscarán el contacto y especialistas del participante
 	public ModelAndView obtener(@PathVariable("id") int id, ModelMap m) {
 		Inscrito empty = new Inscrito();
 		Inscrito obtener = srvc_inscritos.obtener(id);
@@ -72,13 +79,28 @@ public class InscritoController implements IDatoController<Inscrito> {
 		}
 	}
 
+	// Se supone que aquí se realizan las búsquedas.
+	// Por ahora, serán de nombre y apellido
+	@GetMapping("/buscar")
+	public ModelAndView formularioBuscar(String buscar) {
+		return new ModelAndView("crud/buscar/BuscaInscritos");
+	}
+
+	@PostMapping("/buscar")
+	public RedirectView encontrar(@RequestParam String buscar, RedirectAttributes atributos) {
+		List<Inscrito> lista_buscar = srvc_inscritos.buscar(buscar);
+		atributos.addFlashAttribute("list", lista_buscar);
+		atributos.addFlashAttribute("texto", "Resultados de la búsqueda: " + lista_buscar.size());
+		return new RedirectView("/inscripciones");
+	}
+
 	@GetMapping("/crear")
 	public ModelAndView formularioCrear(ModelMap m) {
 		Inscrito nuevo = new Inscrito();
 		m.addAttribute("inscrito", nuevo);
 		m.addAttribute("modalidades", enumerarModalidad());
-		m.addAttribute("contactos", srvc_contactos.listarTodo()); //Estos son para el formulario
-		m.addAttribute("especialistas", srvc_especialistas.listarTodo()); //Recuerda sus nombres
+		m.addAttribute("contactos", srvc_contactos.listarTodo()); // Estos son para el formulario
+		m.addAttribute("especialistas", srvc_especialistas.listarTodo()); // Recuerda sus nombres
 		return new ModelAndView("crud/crear/Inscrito", m);
 	}
 
@@ -89,8 +111,8 @@ public class InscritoController implements IDatoController<Inscrito> {
 		if (!cambiar.equals(empty)) {
 			m.addAttribute("inscrito", cambiar);
 			m.addAttribute("modalidades", enumerarModalidad());
-			m.addAttribute("contactos", srvc_contactos.listarTodo()); //Estos son para el formulario
-			m.addAttribute("especialistas", srvc_especialistas.listarTodo()); //Recuerda sus nombres
+			m.addAttribute("contactos", srvc_contactos.listarTodo()); // Estos son para el formulario
+			m.addAttribute("especialistas", srvc_especialistas.listarTodo()); // Recuerda sus nombres
 			return new ModelAndView("crud/crear/Inscrito", m);
 		} else {
 			return new ModelAndView("redirect:/inscripciones");
@@ -132,18 +154,18 @@ public class InscritoController implements IDatoController<Inscrito> {
 		}
 		return new RedirectView("/inscripciones");
 	}
-	
+
 	@PostMapping("/volver")
 	public ModelAndView volver() {
 		return new ModelAndView("redirect:/inscripciones");
 	}
-	
-	//Métodos ULTRA experimentales para generar PDF
+
+	// Métodos ULTRA experimentales para generar PDF
 	@SuppressWarnings("unchecked")
 	@GetMapping("/pdf")
 	public void crearListaPdf(HttpSession s, HttpServletResponse respuesta) throws DocumentException, IOException {
 		List<Inscrito> listado = new LinkedList<Inscrito>();
-		if(s.getAttribute("listado") == null) {
+		if (s.getAttribute("listado") == null) {
 			listado = srvc_inscritos.listarTodo();
 		} else {
 			listado = (List<Inscrito>) s.getAttribute("listado");
@@ -157,11 +179,12 @@ public class InscritoController implements IDatoController<Inscrito> {
 	}
 
 	@GetMapping("/{id}/pdf")
-	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta) throws DocumentException, IOException {
+	public void crearPdf(@PathVariable("id") int id, HttpServletResponse respuesta)
+			throws DocumentException, IOException {
 		Inscrito imprimir = srvc_inscritos.obtener(id);
 		respuesta.setContentType("application/pdf");
 		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=participante_"+imprimir.getId() + ".pdf";
+		String headervalue = "attachment; filename=participante_" + imprimir.getId() + ".pdf";
 		respuesta.setHeader(headerkey, headervalue);
 		InscritoPdfs generador = new InscritoPdfs();
 		generador.crearIndividual(imprimir, respuesta);

@@ -38,7 +38,7 @@ public class InscritoService implements IDatoService<Inscrito> {
 	@Override
 	public Inscrito obtener(int id) {
 		try {
-			ResponseEntity<Inscrito> obtener = plantillaRest.getForEntity(baseUri + "inscripciones/"+id,
+			ResponseEntity<Inscrito> obtener = plantillaRest.getForEntity(baseUri + "inscripciones/" + id,
 					Inscrito.class);
 			return obtener.getBody();
 		} catch (Exception e) {
@@ -54,10 +54,22 @@ public class InscritoService implements IDatoService<Inscrito> {
 
 	@Override
 	public String eliminar(int id) {
-		ResponseEntity<String> respuesta = plantillaRest.exchange(baseUri + "inscripciones/" + id,
-				HttpMethod.DELETE, null, new ParameterizedTypeReference<String>() {
+		ResponseEntity<String> respuesta = plantillaRest.exchange(baseUri + "inscripciones/" + id, HttpMethod.DELETE,
+				null, new ParameterizedTypeReference<String>() {
 				});
 		return respuesta.getStatusCode().toString();
 	}
-}
 
+	@Override
+	public List<Inscrito> buscar(String buscar) {
+		try {
+			ResponseEntity<List<Inscrito>> respuesta = plantillaRest.exchange(
+					baseUri + "inscripciones/buscar?buscar=" + buscar, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<Inscrito>>() {
+					});
+			return respuesta.getBody();
+		} catch (Exception e) {
+			return new LinkedList<Inscrito>();
+		}
+	}
+}

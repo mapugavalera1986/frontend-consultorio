@@ -59,4 +59,17 @@ public class ContactoService implements IDatoService<Contacto> {
 				});
 		return respuesta.getStatusCode().toString();
 	}
+
+	@Override
+	public List<Contacto> buscar(String buscar) {
+		try {
+			ResponseEntity<List<Contacto>> respuesta = plantillaRest.exchange(
+					baseUri + "contactos/buscar?buscar=" + buscar, HttpMethod.GET, null,
+					new ParameterizedTypeReference<List<Contacto>>() {
+					});
+			return respuesta.getBody();
+		} catch (Exception e) {
+			return new LinkedList<Contacto>();
+		}
+	}
 }
