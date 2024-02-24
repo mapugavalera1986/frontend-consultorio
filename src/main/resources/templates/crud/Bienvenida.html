@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>EITA :: Inicio</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light"
+		style="background-color: #e3f2fd;">
+		<div class="container-fluid">
+			<a th:href="@{/}" class="navbar-brand"> <img
+				th:src="@{images/Tango_icon_nature.svg}" height="28" alt="Inicio">
+			</a>
+			<button type="button" class="navbar-toggler"
+				data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<div class="navbar-nav">
+					<a th:href="@{/inscripciones}" class="nav-item nav-link">Inscripciones</a>
+					<a th:href="@{/contactos}" class="nav-item nav-link">Contactos</a>
+					<a th:href="@{/especialistas}" class="nav-item nav-link">Especialistas</a>
+				</div>
+				<div class="navbar-nav ms-auto">
+					<a th:href="@{/perfil}" class="nav-item nav-link">Mi perfil</a> <a
+						th:href="@{/salir}" class="nav-item nav-link text-danger">Salir</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container-xxl">
+		<div class="row" style="min-height: 120px;"></div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+				<img th:src="@{images/logo_medio.png}" alt="Logotipo de EITA en todo color">
+				<br>
+				<p>¡Te damos la bienvenida!</p>
+				<p>Esperamos que tu experiencia utilizando este sistema de CRUD sea tan placentera como lo fue diseñarlo.</p>
+				<p>Ten en cuenta que aún está en desarrollo. Si ocurre algún problema, cuéntanoslo.</p>
+			</div>
+			<div class="col"></div>
+		</div>
+		<div class="row" style="min-height: 60px;"></div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+</body>
+</html>
