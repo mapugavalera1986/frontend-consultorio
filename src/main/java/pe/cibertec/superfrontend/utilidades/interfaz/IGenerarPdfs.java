@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import com.lowagie.text.DocumentException;
-
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface IGenerarPdfs<T> {

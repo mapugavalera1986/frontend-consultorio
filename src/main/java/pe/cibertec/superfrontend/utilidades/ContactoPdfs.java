@@ -1,7 +1,6 @@
 package pe.cibertec.superfrontend.utilidades;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.lowagie.text.Document;
@@ -15,45 +14,56 @@ import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import pe.cibertec.superfrontend.modelos.Contacto;
 import pe.cibertec.superfrontend.utilidades.interfaz.IGenerarPdfs;
+import pe.cibertec.superfrontend.xtra.Texto;
 
 public class ContactoPdfs implements IGenerarPdfs<Contacto> {
 
 	@Override
-	public void crearGrupal(List<Contacto> lista, HttpServletResponse respuesta) throws DocumentException, IOException {
+	public void crearGrupal(List<Contacto> listado, HttpServletResponse respuesta) throws DocumentException, IOException {
 		Document nuevo_doc = new Document(PageSize.A4);
 		PdfWriter.getInstance(nuevo_doc, respuesta.getOutputStream());
 		nuevo_doc.open();//Aquí empiezas a formatear el documento
-		//Le damos formato al texto
-		Font fntTexto = FontFactory.getFont(FontFactory.HELVETICA);
-		fntTexto.setSize(11);
-		//Creamos el encabezado
-		Paragraph encabezado = new Paragraph("Contactos", fntTexto);
+		nuevo_doc.setMargins(16, 16, 16, 16);
+		Paragraph encabezado = new Paragraph("Lista de contactos de participantes inscritos", elegirFuente(16, "bold"));
 		encabezado.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+		encabezado.setSpacingAfter(12);
 		nuevo_doc.add(encabezado);
-		//Vamos a probar cómo añadir varios párrafos con la info
-		List<Paragraph> cuerpo = new LinkedList<Paragraph>();
-		for(int i=0; i<lista.size();i++) {
-			cuerpo.add(new Paragraph(lista.get(i).toString(), fntTexto));
-			nuevo_doc.add(cuerpo.get(i));
+		for(Contacto i : listado) {
+			nuevo_doc.add(redactarEntidad(i, elegirFuente(11, "normal")));
 		}
-		//Aquí termina añadir párrafos
-		nuevo_doc.close();//Aquí ya no puedes formatear
+		nuevo_doc.close();
 	}
-
+	
 	@Override
 	public void crearIndividual(Contacto entidad, HttpServletResponse respuesta) throws DocumentException, IOException {
 		Document nuevo_doc = new Document(PageSize.A4);
 		PdfWriter.getInstance(nuevo_doc, respuesta.getOutputStream());
-		nuevo_doc.open();//Aquí empiezas a formatear el documento
-		//Le damos formato al texto
-		Font fntTexto = FontFactory.getFont(FontFactory.HELVETICA);
-		fntTexto.setSize(11);
-		//Creamos el encabezado
-		Paragraph encabezado = new Paragraph("Contacto", fntTexto);
+		nuevo_doc.open();
+		Paragraph encabezado = new Paragraph("Datos de participante inscrito", elegirFuente(16, "bold"));
 		encabezado.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+		encabezado.setSpacingAfter(12);
 		nuevo_doc.add(encabezado);
-		Paragraph cuerpo = new Paragraph(entidad.toString());
-		nuevo_doc.add(cuerpo);
-		nuevo_doc.close();//Aquí ya no puedes formatear
+		nuevo_doc.add(redactarEntidad(entidad, elegirFuente(11, "normal")));
+		nuevo_doc.close();
+	}
+	
+	private Paragraph redactarEntidad(Contacto entidad, Font fuente){
+		String texto_entidad = "Contacto: "
+			+ entidad.getNmbrs() + " " + entidad.getApllds()
+			+ "\nDNI: " + Texto.mostrarOmitido(entidad.getDni(),"No se registró")
+			+ "\nE-Mail: " + Texto.mostrarOmitido(entidad.getEmail(), "No se registró")
+			+ "\nTelf.: " + Texto.mostrarOmitido(entidad.getTelf(), "No se registró")
+			+ "\nPartc. a cargo: " + entidad.getInscritos().size();
+		Paragraph redactar_entidad = new Paragraph(texto_entidad, fuente);
+		redactar_entidad.setAlignment(Paragraph.ALIGN_JUSTIFIED);
+		redactar_entidad.setSpacingAfter(8);
+		return redactar_entidad;
+	}
+	
+	private Font elegirFuente(int size, String propiedad) {
+		Font fuente = FontFactory.getFont(FontFactory.HELVETICA);
+		fuente.setSize(size);
+		fuente.setStyle(propiedad);
+		return fuente;
 	}
 }
